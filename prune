@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# What keeps you regular? Prune!
+# Introducing the regular expression checker -- prune
+#
+# prune [REGEX] [STRING]...
+
+REGEX=$1
+
+shift
+
+while [[ $# -gt 0 ]]; do
+	if [[ $1 =~ $REGEX ]]; then
+		echo "+$1"
+	else
+		echo -e "\t -$1"
+	fi
+	shift
+done
