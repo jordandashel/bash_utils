@@ -4,16 +4,46 @@
 # Introducing the regular expression checker -- prune
 #
 # prune [REGEX] [STRING]...
+# prune [REGEX]
+
+
+evaluate_string () {
+	if [[ $1 =~ $REGEX ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+display_output () {
+	while [[ $# -gt 0 ]]; do
+		if evaluate_string $1 ; then
+			echo "+ $1"
+		else
+			echo -e "\t - $1"
+		fi
+		shift
+	done
+}
+
+interactive () {
+	while true; do
+		read
+		if evaluate_string $REPLY; then
+			echo "+ $REPLY"
+		else
+			echo -e "- $REPLY"
+		fi
+	done
+}
+
 
 REGEX=$1
 
 shift
 
-while [[ $# -gt 0 ]]; do
-	if [[ $1 =~ $REGEX ]]; then
-		echo "+$1"
-	else
-		echo -e "\t -$1"
-	fi
-	shift
-done
+if [[ $# -gt 2 ]]; then
+	display_output $@
+else
+	interactive
+fi
